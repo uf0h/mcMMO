@@ -295,6 +295,11 @@ public final class CommandUtils {
     for (OfflinePlayer offlinePlayer : mcMMO.p.getServer().getOfflinePlayers()) {
       String playerName = offlinePlayer.getName();
 
+      if (playerName == null) {
+        mcMMO.p.debug("Could not load playerdata for: " + offlinePlayer.getUniqueId());
+        continue;
+      }
+
       if (partialName.equalsIgnoreCase(playerName)) {
         // Exact match
         matchedPlayers.clear();
