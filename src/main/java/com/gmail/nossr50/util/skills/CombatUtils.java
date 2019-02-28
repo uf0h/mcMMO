@@ -4,27 +4,6 @@ import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.bukkit.Material;
-import org.bukkit.entity.AnimalTamer;
-import org.bukkit.entity.Animals;
-import org.bukkit.entity.Arrow;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Guardian;
-import org.bukkit.entity.IronGolem;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.Skeleton;
-import org.bukkit.entity.Tameable;
-import org.bukkit.entity.Wolf;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
-import org.bukkit.event.entity.EntityDamageEvent.DamageModifier;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.projectiles.ProjectileSource;
-
-import com.gmail.nossr50.mcMMO;
 import com.gmail.nossr50.config.experience.ExperienceConfig;
 import com.gmail.nossr50.datatypes.player.McMMOPlayer;
 import com.gmail.nossr50.datatypes.skills.SkillType;
@@ -32,6 +11,7 @@ import com.gmail.nossr50.datatypes.skills.XPGainReason;
 import com.gmail.nossr50.events.fake.FakeEntityDamageByEntityEvent;
 import com.gmail.nossr50.events.fake.FakeEntityDamageEvent;
 import com.gmail.nossr50.locale.LocaleLoader;
+import com.gmail.nossr50.mcMMO;
 import com.gmail.nossr50.party.PartyManager;
 import com.gmail.nossr50.runnables.skills.AwardCombatXpTask;
 import com.gmail.nossr50.runnables.skills.BleedTimerTask;
@@ -42,13 +22,17 @@ import com.gmail.nossr50.skills.swords.Swords;
 import com.gmail.nossr50.skills.swords.SwordsManager;
 import com.gmail.nossr50.skills.taming.TamingManager;
 import com.gmail.nossr50.skills.unarmed.UnarmedManager;
-import com.gmail.nossr50.util.EventUtils;
-import com.gmail.nossr50.util.ItemUtils;
-import com.gmail.nossr50.util.Misc;
-import com.gmail.nossr50.util.MobHealthbarUtils;
-import com.gmail.nossr50.util.Permissions;
+import com.gmail.nossr50.util.*;
 import com.gmail.nossr50.util.player.UserManager;
 import com.google.common.collect.ImmutableMap;
+import org.bukkit.Material;
+import org.bukkit.entity.*;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
+import org.bukkit.event.entity.EntityDamageEvent.DamageModifier;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.projectiles.ProjectileSource;
 
 public final class CombatUtils {
   private CombatUtils() {
@@ -451,7 +435,11 @@ public final class CombatUtils {
       if (mcMMO.getModManager().isCustomEntity(target)) {
         baseXP = mcMMO.getModManager().getEntity(target).getXpMultiplier();
       } else if (target instanceof Animals) {
-        baseXP = ExperienceConfig.getInstance().getAnimalsXP();
+        EntityType type = target.getType();
+        baseXP = ExperienceConfig.getInstance().getAnimalsXP(type);
+      } else if (target instanceof Monster) {
+        EntityType type = target.getType();
+        baseXP = ExperienceConfig.getInstance().getCombatXP(type);
       } else {
         EntityType type = target.getType();
 
@@ -459,7 +447,7 @@ public final class CombatUtils {
           case BAT:
           case SQUID:
           case RABBIT:
-            baseXP = ExperienceConfig.getInstance().getAnimalsXP();
+            baseXP = ExperienceConfig.getInstance().getAnimalsXP(type);
             break;
 
           case BLAZE:
@@ -467,6 +455,7 @@ public final class CombatUtils {
           case CREEPER:
           case ENDER_DRAGON:
           case ENDERMAN:
+          case ENDERMITE:
           case GHAST:
           case GIANT:
           case MAGMA_CUBE:
@@ -477,31 +466,13 @@ public final class CombatUtils {
           case WITCH:
           case WITHER:
           case ZOMBIE:
-          case ENDERMITE:
+          case GUARDIAN:
             baseXP = ExperienceConfig.getInstance().getCombatXP(type);
-            break;
 
-          case SKELETON:
-            switch (((Skeleton) target).getSkeletonType()) {
-              case WITHER:
-                baseXP = ExperienceConfig.getInstance().getWitherSkeletonXP();
-                break;
-              default:
-                baseXP = ExperienceConfig.getInstance().getCombatXP(type);
-                break;
-            }
             break;
 
           case IRON_GOLEM:
             if (!((IronGolem) target).isPlayerCreated()) {
-              baseXP = ExperienceConfig.getInstance().getCombatXP(type);
-            }
-            break;
-
-          case GUARDIAN:
-            if (((Guardian) target).isElder()) {
-              baseXP = ExperienceConfig.getInstance().getElderGuardianXP();
-            } else {
               baseXP = ExperienceConfig.getInstance().getCombatXP(type);
             }
             break;

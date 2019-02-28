@@ -3,19 +3,18 @@ package com.gmail.nossr50.config.experience;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.bukkit.GrassSpecies;
-import org.bukkit.Material;
-import org.bukkit.TreeSpecies;
-import org.bukkit.entity.EntityType;
-import org.bukkit.material.LongGrass;
-import org.bukkit.material.MaterialData;
-
 import com.gmail.nossr50.config.AutoUpdateConfigLoader;
 import com.gmail.nossr50.datatypes.experience.FormulaType;
 import com.gmail.nossr50.datatypes.skills.MaterialType;
 import com.gmail.nossr50.datatypes.skills.SkillType;
 import com.gmail.nossr50.datatypes.skills.alchemy.PotionStage;
 import com.gmail.nossr50.util.StringUtils;
+import org.bukkit.GrassSpecies;
+import org.bukkit.Material;
+import org.bukkit.TreeSpecies;
+import org.bukkit.entity.EntityType;
+import org.bukkit.material.LongGrass;
+import org.bukkit.material.MaterialData;
 
 public class ExperienceConfig extends AutoUpdateConfigLoader {
   private static ExperienceConfig instance;
@@ -102,10 +101,6 @@ public class ExperienceConfig extends AutoUpdateConfigLoader {
     /* Combat XP Multipliers */
     if (getAnimalsXP() < 0) {
       reason.add("Experience.Combat.Multiplier.Animals should be at least 0!");
-    }
-
-    if (getWitherSkeletonXP() < 0) {
-      reason.add("Experience.Combat.Multiplier.Wither_Skeleton should be at least 0!");
     }
 
     if (getDodgeXPModifier() < 0) {
@@ -252,16 +247,12 @@ public class ExperienceConfig extends AutoUpdateConfigLoader {
     return config.getDouble("Experience.Combat.Multiplier." + StringUtils.getPrettyEntityTypeString(entity).replace(" ", "_"));
   }
 
+  public double getAnimalsXP(EntityType entity) {
+    return config.getDouble("Experience.Combat.Multiplier." + StringUtils.getPrettyEntityTypeString(entity).replace(" ", "_"), getAnimalsXP());
+  }
+
   public double getAnimalsXP() {
     return config.getDouble("Experience.Combat.Multiplier.Animals", 1.0);
-  }
-
-  public double getWitherSkeletonXP() {
-    return config.getDouble("Experience.Combat.Multiplier.Wither_Skeleton", 4.0);
-  }
-
-  public double getElderGuardianXP() {
-    return config.getDouble("Experience.Combat.Multiplier.Elder_Guardian", 4.0);
   }
 
   /* Materials  */
