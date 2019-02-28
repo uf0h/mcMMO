@@ -128,11 +128,11 @@ public class ExperienceConfig extends AutoUpdateConfigLoader {
     }
 
     /* Taming */
-    if (getTamingXPWolf() <= 0) {
+    if (getTamingXP(EntityType.WOLF) <= 0) {
       reason.add("Experience.Taming.Animal_Taming.Wolf should be greater than 0!");
     }
 
-    if (getTamingXPOcelot() <= 0) {
+    if (getTamingXP(EntityType.OCELOT) <= 0) {
       reason.add("Experience.Taming.Animal_Taming.Ocelot should be greater than 0!");
     }
 
@@ -449,6 +449,10 @@ public class ExperienceConfig extends AutoUpdateConfigLoader {
 
   public int getTamingXPOcelot() {
     return config.getInt("Experience.Taming.Animal_Taming.Ocelot", 500);
+  }
+
+  public int getTamingXP(EntityType type) {
+    return config.getInt("Experience.Taming.Animal_Taming." + StringUtils.getPrettyEntityTypeString(type));
   }
 
   /* Woodcutting */

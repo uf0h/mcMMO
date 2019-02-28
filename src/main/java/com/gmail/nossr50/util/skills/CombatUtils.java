@@ -451,49 +451,17 @@ public final class CombatUtils {
         baseXP = ExperienceConfig.getInstance().getAnimalsXP(type);
       } else if (target instanceof Monster) {
         EntityType type = target.getType();
-        baseXP = ExperienceConfig.getInstance().getCombatXP(type);
-      } else {
-        EntityType type = target.getType();
 
-        switch (type) {
-          case BAT:
-          case SQUID:
-          case RABBIT:
-            baseXP = ExperienceConfig.getInstance().getAnimalsXP(type);
-            break;
-
-          case BLAZE:
-          case CAVE_SPIDER:
-          case CREEPER:
-          case ENDER_DRAGON:
-          case ENDERMAN:
-          case ENDERMITE:
-          case GHAST:
-          case GIANT:
-          case MAGMA_CUBE:
-          case PIG_ZOMBIE:
-          case SILVERFISH:
-          case SLIME:
-          case SPIDER:
-          case WITCH:
-          case WITHER:
-          case ZOMBIE:
-          case GUARDIAN:
+        if (type == EntityType.IRON_GOLEM) {
+          if (!((IronGolem) target).isPlayerCreated()) {
             baseXP = ExperienceConfig.getInstance().getCombatXP(type);
-
-            break;
-
-          case IRON_GOLEM:
-            if (!((IronGolem) target).isPlayerCreated()) {
-              baseXP = ExperienceConfig.getInstance().getCombatXP(type);
-            }
-            break;
-
-          default:
-            baseXP = 1.0;
-            mcMMO.getModManager().addCustomEntity(target);
-            break;
+          }
+        } else {
+          baseXP = ExperienceConfig.getInstance().getCombatXP(type);
         }
+      } else {
+        baseXP = 1.0;
+        mcMMO.getModManager().addCustomEntity(target);
       }
 
       if (target.hasMetadata(mcMMO.entityMetadataKey)) {
