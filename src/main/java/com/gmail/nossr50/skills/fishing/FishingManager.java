@@ -106,7 +106,7 @@ public class FishingManager extends SkillManager {
       vehicle.remove();
     }
 
-    player.teleport(player.getTargetBlock((HashSet<Byte>) null, 100).getLocation(), TeleportCause.PLUGIN);
+    player.teleport(player.getTargetBlock((HashSet<Material>) null, 100).getLocation(), TeleportCause.PLUGIN);
 
     String unleashMessage = AdvancedConfig.getInstance().getPlayerUnleashMessage();
 
@@ -168,7 +168,7 @@ public class FishingManager extends SkillManager {
       return false;
     }
 
-    Block targetBlock = getPlayer().getTargetBlock((HashSet<Byte>) BlockUtils.getTransparentBlocks(), 100);
+    Block targetBlock = getPlayer().getTargetBlock(BlockUtils.getTransparentBlocks(), 100);
 
     if (!targetBlock.isLiquid()) {
       return false;
