@@ -25,6 +25,7 @@ import com.gmail.nossr50.skills.unarmed.UnarmedManager;
 import com.gmail.nossr50.util.*;
 import com.gmail.nossr50.util.player.UserManager;
 import com.google.common.collect.ImmutableMap;
+import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.entity.*;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -505,6 +506,10 @@ public final class CombatUtils {
 
       // Vanished players should not be able to get hit by AoE effects
       if (!player.canSee(defender)) {
+        return false;
+      }
+
+      if (defender.getGameMode() == GameMode.SPECTATOR) {
         return false;
       }
 
