@@ -264,7 +264,6 @@ public class SkillUtils {
     item.setDurability((short) 0);
 
     int quantity = 0;
-    MaterialData repairData = repairMaterial != null ? new MaterialData(repairMaterial, repairMetadata) : null;
     List<Recipe> recipes = mcMMO.p.getServer().getRecipesFor(item);
 
     if (recipes.isEmpty()) {
@@ -275,13 +274,13 @@ public class SkillUtils {
 
     if (recipe instanceof ShapelessRecipe) {
       for (ItemStack ingredient : ((ShapelessRecipe) recipe).getIngredientList()) {
-        if (ingredient != null && (repairMaterial == null || ingredient.getType() == repairMaterial) && (repairMetadata == -1 || ingredient.getData().equals(repairData))) {
+        if (ingredient != null && (repairMaterial == null || ingredient.getType() == repairMaterial) && (repairMetadata == -1 || ingredient.getType().equals(repairMaterial))) {
           quantity += ingredient.getAmount();
         }
       }
     } else if (recipe instanceof ShapedRecipe) {
       for (ItemStack ingredient : ((ShapedRecipe) recipe).getIngredientMap().values()) {
-        if (ingredient != null && (repairMaterial == null || ingredient.getType() == repairMaterial) && (repairMetadata == -1 || ingredient.getData().equals(repairData))) {
+        if (ingredient != null && (repairMaterial == null || ingredient.getType() == repairMaterial) && (repairMetadata == -1 || ingredient.getType().equals(repairMaterial))) {
           quantity += ingredient.getAmount();
         }
       }
