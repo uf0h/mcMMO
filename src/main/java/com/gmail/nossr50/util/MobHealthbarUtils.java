@@ -51,6 +51,11 @@ public final class MobHealthbarUtils {
       return;
     }
 
+    // Don't mangle invalid entities, they're not going to be rendered anyways
+    if (!target.isValid()) {
+      return;
+    }
+
     PlayerProfile profile = UserManager.getPlayer(player).getProfile();
 
     if (profile.getMobHealthbarType() == null) {
