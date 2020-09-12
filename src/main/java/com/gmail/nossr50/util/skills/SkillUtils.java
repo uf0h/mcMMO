@@ -3,6 +3,7 @@ package com.gmail.nossr50.util.skills;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.gmail.nossr50.util.player.NotificationManager;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;

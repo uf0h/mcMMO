@@ -1,5 +1,6 @@
 package com.gmail.nossr50.skills.acrobatics;
 
+import com.gmail.nossr50.util.player.NotificationManager;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -58,7 +59,7 @@ public class AcrobaticsManager extends SkillManager {
       ParticleEffectUtils.playDodgeEffect(player);
 
       if (mcMMOPlayer.useChatNotifications()) {
-        player.sendMessage(LocaleLoader.getString("Acrobatics.Combat.Proc"));
+        NotificationManager.sendPlayerActionBarMessage(player, LocaleLoader.getString("Acrobatics.Combat.Proc"));
       }
 
       // Why do we check respawn cooldown here?
@@ -88,7 +89,7 @@ public class AcrobaticsManager extends SkillManager {
     double modifiedDamage = Acrobatics.calculateModifiedRollDamage(damage, Acrobatics.rollThreshold);
 
     if (!isFatal(modifiedDamage) && SkillUtils.activationSuccessful(SecondaryAbility.ROLL, player, getSkillLevel(), activationChance)) {
-      player.sendMessage(LocaleLoader.getString("Acrobatics.Roll.Text"));
+      NotificationManager.sendPlayerActionBarMessage(player, LocaleLoader.getString("Acrobatics.Roll.Text"));
       applyXpGain(calculateRollXP(damage, true), XPGainReason.PVE);
 
       return modifiedDamage;

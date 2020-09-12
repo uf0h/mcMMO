@@ -6,6 +6,7 @@ import java.util.Set;
 import java.util.UUID;
 
 import com.gmail.nossr50.runnables.skills.BleedTimerTask;
+import com.gmail.nossr50.util.player.NotificationManager;
 import com.gmail.nossr50.util.player.UserManager;
 import com.gmail.nossr50.util.scoreboards.ScoreboardManager;
 import org.bukkit.GameMode;
@@ -506,7 +507,7 @@ public class McMMOPlayer {
       player.playSound(player.getLocation(), Sound.LEVEL_UP, Misc.LEVELUP_VOLUME, Misc.LEVELUP_PITCH);
     }
 
-    player.sendMessage(LocaleLoader.getString(StringUtils.getCapitalized(skillType.toString()) + ".Skillup", levelsGained, getSkillLevel(skillType)));
+    NotificationManager.sendPlayerActionBarMessage(player, LocaleLoader.getString(StringUtils.getCapitalized(skillType.toString()) + ".Skillup", levelsGained, getSkillLevel(skillType)));
   }
 
   /*
@@ -751,7 +752,7 @@ public class McMMOPlayer {
     ParticleEffectUtils.playAbilityEnabledEffect(player);
 
     if (useChatNotifications()) {
-      player.sendMessage(ability.getAbilityOn());
+      NotificationManager.sendPlayerActionBarMessage(player, ability.getAbilityOn());
     }
 
     SkillUtils.sendSkillMessage(player, ability.getAbilityPlayer(player));
@@ -800,13 +801,13 @@ public class McMMOPlayer {
         int timeRemaining = calculateTimeRemaining(ability);
 
         if (!getAbilityMode(ability) && timeRemaining > 0) {
-          player.sendMessage(LocaleLoader.getString("Skills.TooTired", timeRemaining));
+          NotificationManager.sendPlayerActionBarMessage(player, LocaleLoader.getString("Skills.TooTired", timeRemaining));
           return;
         }
       }
 
       if (Config.getInstance().getAbilityMessagesEnabled()) {
-        player.sendMessage(tool.getRaiseTool());
+        NotificationManager.sendPlayerActionBarMessage(player, tool.getRaiseTool());
       }
 
       setToolPreparationMode(tool, true);

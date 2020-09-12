@@ -1,5 +1,6 @@
 package com.gmail.nossr50.runnables.skills;
 
+import com.gmail.nossr50.util.player.NotificationManager;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import com.gmail.nossr50.config.Config;
@@ -24,7 +25,7 @@ public class ToolLowerTask extends BukkitRunnable {
     mcMMOPlayer.setToolPreparationMode(tool, false);
 
     if (Config.getInstance().getAbilityMessagesEnabled()) {
-      mcMMOPlayer.getPlayer().sendMessage(tool.getLowerTool());
+      NotificationManager.sendPlayerActionBarMessage(mcMMOPlayer.getPlayer(), tool.getLowerTool());
     }
   }
 }

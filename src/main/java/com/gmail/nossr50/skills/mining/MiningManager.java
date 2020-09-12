@@ -18,6 +18,7 @@ import com.gmail.nossr50.util.BlockUtils;
 import com.gmail.nossr50.util.EventUtils;
 import com.gmail.nossr50.util.Misc;
 import com.gmail.nossr50.util.Permissions;
+import com.gmail.nossr50.util.player.NotificationManager;
 import com.gmail.nossr50.util.skills.SkillUtils;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -100,7 +101,7 @@ public class MiningManager extends SkillManager {
     TNTPrimed tnt = player.getWorld().spawn(targetBlock.getLocation(), TNTPrimed.class);
 
     SkillUtils.sendSkillMessage(player, AbilityType.BLAST_MINING.getAbilityPlayer(player));
-    player.sendMessage(LocaleLoader.getString("Mining.Blast.Boom"));
+    NotificationManager.sendPlayerActionBarMessage(player, LocaleLoader.getString("Mining.Blast.Boom"));
 
     tnt.setMetadata(mcMMO.tntMetadataKey, mcMMOPlayer.getPlayerMetadata());
     tnt.setFuseTicks(0);

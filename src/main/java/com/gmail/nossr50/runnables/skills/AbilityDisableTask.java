@@ -1,5 +1,6 @@
 package com.gmail.nossr50.runnables.skills;
 
+import com.gmail.nossr50.util.player.NotificationManager;
 import org.bukkit.Chunk;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -56,7 +57,7 @@ public class AbilityDisableTask extends BukkitRunnable {
     ParticleEffectUtils.playAbilityDisabledEffect(player);
 
     if (mcMMOPlayer.useChatNotifications()) {
-      player.sendMessage(ability.getAbilityOff());
+      NotificationManager.sendPlayerActionBarMessage(player, ability.getAbilityOff());
     }
 
     SkillUtils.sendSkillMessage(player, ability.getAbilityPlayerOff(player));

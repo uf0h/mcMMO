@@ -2,6 +2,7 @@ package com.gmail.nossr50.skills.axes;
 
 import java.util.Map;
 
+import com.gmail.nossr50.util.player.NotificationManager;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent.DamageModifier;
@@ -75,14 +76,14 @@ public class AxesManager extends SkillManager {
     Player player = getPlayer();
 
     if (mcMMOPlayer.useChatNotifications()) {
-      player.sendMessage(LocaleLoader.getString("Axes.Combat.CriticalHit"));
+      NotificationManager.sendPlayerActionBarMessage(player, LocaleLoader.getString("Axes.Combat.CriticalHit"));
     }
 
     if (target instanceof Player) {
       Player defender = (Player) target;
 
       if (UserManager.getPlayer(defender).useChatNotifications()) {
-        defender.sendMessage(LocaleLoader.getString("Axes.Combat.CritStruck"));
+        NotificationManager.sendPlayerActionBarMessage(defender, LocaleLoader.getString("Axes.Combat.CritStruck"));
       }
 
       damage = (damage * Axes.criticalHitPVPModifier) - damage;
@@ -126,14 +127,14 @@ public class AxesManager extends SkillManager {
     target.setVelocity(player.getLocation().getDirection().normalize().multiply(Axes.greaterImpactKnockbackMultiplier));
 
     if (mcMMOPlayer.useChatNotifications()) {
-      player.sendMessage(LocaleLoader.getString("Axes.Combat.GI.Proc"));
+      NotificationManager.sendPlayerActionBarMessage(player, LocaleLoader.getString("Axes.Combat.GI.Proc"));
     }
 
     if (target instanceof Player) {
       Player defender = (Player) target;
 
       if (UserManager.getPlayer(defender).useChatNotifications()) {
-        defender.sendMessage(LocaleLoader.getString("Axes.Combat.GI.Struck"));
+        NotificationManager.sendPlayerActionBarMessage(defender, LocaleLoader.getString("Axes.Combat.GI.Struck"));
       }
     }
 
