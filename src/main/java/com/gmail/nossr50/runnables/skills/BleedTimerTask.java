@@ -4,22 +4,23 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
-
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
-
 import com.gmail.nossr50.config.AdvancedConfig;
 import com.gmail.nossr50.locale.LocaleLoader;
 import com.gmail.nossr50.util.skills.CombatUtils;
 import com.gmail.nossr50.util.skills.ParticleEffectUtils;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 
 public class BleedTimerTask extends BukkitRunnable {
   private final static int MAX_BLEED_TICKS = 10;
   private static Map<LivingEntity, Integer> bleedList = new HashMap<LivingEntity, Integer>();
+  private static boolean isIterating = false;
 
   @Override
   public void run() {
+    isIterating = true;
     for (Iterator<Entry<LivingEntity, Integer>> bleedIterator = bleedList.entrySet().iterator(); bleedIterator.hasNext(); ) {
       Entry<LivingEntity, Integer> entry = bleedIterator.next();
       LivingEntity entity = entry.getKey();
@@ -64,6 +65,7 @@ public class BleedTimerTask extends BukkitRunnable {
         ParticleEffectUtils.playBleedEffect(entity);
       }
     }
+    isIterating = false;
   }
 
   /**
@@ -96,14 +98,19 @@ public class BleedTimerTask extends BukkitRunnable {
    * @param ticks  Number of bleeding ticks
    */
   public static void add(LivingEntity entity, int ticks) {
+    if (!Bukkit.isPrimaryThread()) {
+      throw new IllegalStateException("Cannot add bleed task async!");
+    }
+
+    if (isIterating) throw new IllegalStateException("Cannot add task while iterating timers!");
+
     int newTicks = ticks;
 
     if (bleedList.containsKey(entity)) {
       newTicks += bleedList.get(entity);
-      bleedList.put(entity, Math.min(newTicks, MAX_BLEED_TICKS));
-    } else {
-      bleedList.put(entity, Math.min(newTicks, MAX_BLEED_TICKS));
     }
+
+    bleedList.put(entity, Math.min(newTicks, MAX_BLEED_TICKS));
   }
 
   public static boolean isBleeding(LivingEntity entity) {
